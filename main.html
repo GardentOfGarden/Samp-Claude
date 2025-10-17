@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Claude API - Unlimited Access</title>
+    <script src="https://js.puter.com/v2/"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .model-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .model-card {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .model-card:hover {
+            background: #edf2f7;
+            border-color: #667eea;
+        }
+
+        .demo-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #4a5568;
+        }
+
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group select:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .input-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .output {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            min-height: 100px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+        }
+
+        .code-block {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .example {
+            margin: 25px 0;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .example h4 {
+            margin-bottom: 10px;
+            color: #4a5568;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 50px;
+            padding: 30px;
+            opacity: 0.8;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading.spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Free Claude API</h1>
+            <div class="subtitle">Unlimited Access to Claude AI - No API Keys Required</div>
+            <div class="subtitle">Updated: September 29, 2025</div>
+        </header>
+
+        <div class="card">
+            <h2>🚀 About This Service</h2>
+            <p>This tutorial shows you how to use Puter.js to access Claude's advanced AI capabilities for free, without any API keys, backend, or servers. Generate text with Claude for creative writing, code generation, and more without worrying about usage limits or costs.</p>
+        </div>
+
+        <div class="card">
+            <h2>🤖 Available Claude Models</h2>
+            <div class="model-grid">
+                <div class="model-card">
+                    <strong>Claude Sonnet 4</strong>
+                </div>
+                <div class="model-card">
+                    <strong>Claude Opus 4</strong>
+                </div>
+                <div class="model-card">
+                    <strong>Claude Opus 4.1</strong>
+                </div>
+                <div class="model-card">
+                    <strong>Claude Sonnet 4.5</strong>
+                </div>
+                <div class="model-card">
+                    <strong>Claude 3.7 Sonnet</strong>
+                </div>
+                <div class="model-card">
+                    <strong>Claude 3.7 Opus</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎮 Live Demo</h2>
+            <div class="demo-section">
+                <div class="input-group">
+                    <label for="modelSelect">Select Claude Model:</label>
+                    <select id="modelSelect">
+                        <option value="claude-sonnet-4">Claude Sonnet 4</option>
+                        <option value="claude-opus-4">Claude Opus 4</option>
+                        <option value="claude-opus-4-1">Claude Opus 4.1</option>
+                        <option value="claude-sonnet-4-5">Claude Sonnet 4.5</option>
+                        <option value="claude-3-7-sonnet">Claude 3.7 Sonnet</option>
+                        <option value="claude-3-7-opus">Claude 3.7 Opus</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="userPrompt">Your Message:</label>
+                    <textarea id="userPrompt" placeholder="Enter your prompt here...">Explain quantum computing in simple terms</textarea>
+                </div>
+
+                <div class="input-group">
+                    <label>
+                        <input type="checkbox" id="streamCheckbox">
+                        Enable Streaming Response
+                    </label>
+                </div>
+
+                <button class="btn" onclick="generateResponse()">Generate Response</button>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Generating response...</p>
+                </div>
+
+                <div class="output" id="output">
+                    Response will appear here...
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>💻 Code Examples</h2>
+            
+            <div class="example">
+                <h4>Example 1: Basic Text Generation</h4>
+                <div class="code-block">
+// Basic text generation with Claude Sonnet 4
+puter.ai.chat("Explain quantum computing in simple terms", {model: 'claude-sonnet-4'})
+    .then(response => {
+        console.log(response.message.content[0].text);
+    });
+                </div>
+                <button class="btn" onclick="runExample1()">Run Example</button>
+            </div>
+
+            <div class="example">
+                <h4>Example 2: Streaming Response</h4>
+                <div class="code-block">
+// Streaming response for longer queries
+async function streamClaudeResponse() {
+    const response = await puter.ai.chat(
+        "Write a detailed essay on AI impact", 
+        {model: 'claude-opus-4', stream: true}
+    );
+    
+    for await (const part of response) {
+        console.log(part?.text);
+    }
+}
+streamClaudeResponse();
+                </div>
+                <button class="btn" onclick="runExample2()">Run Example</button>
+            </div>
+
+            <div class="example">
+                <h4>Example 3: Different Models Comparison</h4>
+                <div class="code-block">
+// Compare different Claude models
+const models = ['claude-sonnet-4', 'claude-opus-4'];
+models.forEach(model => {
+    puter.ai.chat("Write a short poem about coding", { model: model })
+        .then(response => {
+            console.log(`${model}: ${response.message.content[0].text}`);
+        });
+});
+                </div>
+                <button class="btn" onclick="runExample3()">Run Example</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔧 Quick Start</h2>
+            <p>Add this script tag to your HTML to get started:</p>
+            <div class="code-block">
+&lt;script src="https://js.puter.com/v2/"&gt;&lt;/script&gt;
+            </div>
+            <p>That's it! No API keys, no sign-ups required.</p>
+        </div>
+
+        <footer>
+            <p>Powered by Puter.js | Free Unlimited Claude API Access</p>
+            <p>This service uses the "User Pays" model - users cover their own usage costs</p>
+        </footer>
+    </div>
+
+    <script>
+        async function generateResponse() {
+            const prompt = document.getElementById('userPrompt').value;
+            const model = document.getElementById('modelSelect').value;
+            const stream = document.getElementById('streamCheckbox').checked;
+            const output = document.getElementById('output');
+            const loading = document.getElementById('loading');
+            const button = event.target;
+
+            // Disable button and show loading
+            button.disabled = true;
+            loading.style.display = 'block';
+            output.textContent = '';
+
+            try {
+                if (stream) {
+                    // Streaming response
+                    const response = await puter.ai.chat(prompt, { model: model, stream: true });
+                    let fullResponse = '';
+                    
+                    for await (const part of response) {
+                        if (part?.text) {
+                            fullResponse += part.text;
+                            output.textContent = fullResponse;
+                        }
+                    }
+                } else {
+                    // Regular response
+                    const response = await puter.ai.chat(prompt, { model: model });
+                    output.textContent = response.message.content[0].text;
+                }
+            } catch (error) {
+                output.textContent = 'Error: ' + error.message;
+                console.error('Claude API Error:', error);
+            } finally {
+                // Re-enable button and hide loading
+                button.disabled = false;
+                loading.style.display = 'none';
+            }
+        }
+
+        async function runExample1() {
+            const output = document.getElementById('output');
+            output.textContent = 'Running Example 1...';
+            
+            try {
+                const response = await puter.ai.chat("Explain quantum computing in simple terms", {model: 'claude-sonnet-4'});
+                output.textContent = response.message.content[0].text;
+            } catch (error) {
+                output.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function runExample2() {
+            const output = document.getElementById('output');
+            output.textContent = 'Running Example 2 (Streaming)...';
+            
+            try {
+                const response = await puter.ai.chat(
+                    "Write a detailed essay on the impact of artificial intelligence on society", 
+                    {model: 'claude-opus-4', stream: true}
+                );
+                
+                let fullResponse = '';
+                for await (const part of response) {
+                    if (part?.text) {
+                        fullResponse += part.text;
+                        output.textContent = fullResponse;
+                    }
+                }
+            } catch (error) {
+                output.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function runExample3() {
+            const output = document.getElementById('output');
+            output.textContent = 'Running Example 3 (Model Comparison)...\n\n';
+            
+            try {
+                const models = ['claude-sonnet-4', 'claude-opus-4'];
+                let results = '';
+                
+                for (const model of models) {
+                    const response = await puter.ai.chat("Write a short poem about coding", { model: model });
+                    results += `=== ${model} ===\n${response.message.content[0].text}\n\n`;
+                    output.textContent = results;
+                }
+            } catch (error) {
+                output.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        // Initialize with a welcome message
+        document.addEventListener('DOMContentLoaded', function() {
+            const output = document.getElementById('output');
+            output.textContent = 'Ready to use Claude AI! Select a model and enter your prompt above.';
+        });
+    </script>
+</body>
+</html>
