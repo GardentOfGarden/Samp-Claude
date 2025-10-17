@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: free-claude-api
+    env: docker
+    docker:
+      dockerfile: Dockerfile
+    envVars:
+      - key: NODE_ENV
+        value: production
+    numInstances: 1
